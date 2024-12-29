@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Vina+Sans&display=swap');
+
+/* Global styles to add to globals.css */
+body {
+  overflow: scroll;
+  background: #19191f;
+}
+
+:root {
+  --theme-color-1: #FB663F;
+  --theme-color-2: #F9CF33;
+  --theme-color-3: #323143;
+  --theme-color-4: #FB663F;
+}
+
+/* Module styles for style.module.css */
+.tourContainer {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  font-family: "Vina Sans", sans-serif;
+  text-transform: uppercase;
+  font-weight: 400;
+  height: 100vh;
+  padding: 2rem;
+}
+
+.heading {
+  font-size: 6.7cqw;
+  color: var(--theme-color-1);
+  font-weight: 400;
+  margin: 0;
+  line-height: 7cqw;
+  position: relative;
+}
+
+.heading span {
+  display: block;
+}
+
+.heading span:last-child {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-image: linear-gradient(var(--theme-color-2) 70%, var(--theme-color-1) 95%, var(--theme-color-1) 100%);
+  -webkit-text-stroke: 0.01em var(--theme-color-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subHeading {
+  font-size: 3.37cqw;
+  background: linear-gradient(var(--theme-color-4) 40%, var(--theme-color-2) 70%, var(--theme-color-2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 4cqw;
+  -webkit-text-stroke: 0.01em var(--theme-color-1);
+  margin-top: 1rem;
+}
+
+.datesList {
+  list-style: none;
+  color: var(--theme-color-1);
+  font-size: 3cqw;
+  text-align: right;
+  margin-right: 0.3cqw;
+  margin-top: 4px;
+  line-height: 3cqw;
+  font-weight: 400;
+  padding-left: 0;
+  border-top: 1px solid #3E3E3E;
+  margin-bottom: 20px;
+}
+
+.datesList li {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.songDiv {
+  margin-top: 6px;
+  border-left: 1px solid #3E3E3E;
+}
+
+.songList {
+  all: unset;
+  container-type: inline-size;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  list-style: none;
+  margin: 0 0.4cqw;
+  gap: 0rem;
+}
+
+.songList li {
+  color: #323143;
+  font-size: 4.7cqw;
+  line-height: 4.74cqw;
+  margin-right: rem;
+  margin-left: 0.2cqw;
+  -webkit-text-stroke: 1px #1a1a1e;
+  text-shadow: 0px 0px 10px #1a1a1e;
+}
+
+@media (max-width: 900px) {
+  .tourContainer {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 28.2cqw;
+    line-height: 22cqw;
+  }
+
+  .subHeading {
+    font-size: 15.4cqw;
+    line-height: 16cqw;
+  }
+
+  .datesList {
+    font-size: 8cqw;
+    line-height: 7cqw;
+    margin-right: 3cqw;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .songDiv {
+    border-left: none;
+    border-top: 1px solid #3E3E3E;
+  }
+
+  .songList {
+    margin-top: 1cqw;
+  }
+}
+
+@media (max-width: 600px) {
+  .heading {
+    font-size: 28.2cqw;
+    line-height: 22cqw;
+  }
+
+  .subHeading {
+    font-size: 15.5cqw;
+    line-height: 16.5cqw;
+  }
+}

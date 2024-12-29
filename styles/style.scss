@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Vina+Sans&display=swap');
+
+body {
+  display:grid;
+  grid-template-columns: 1fr 2fr;
+  flex-direction: column;
+  justify-content: center;
+  background: #19191f;
+  overflow: hidden;
+  font-family: "Vina Sans", sans-serif;
+   text-transform: uppercase;
+  font-weight: 400;
+  overflow: scroll;
+  
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+h1, h2 {
+  font-size: 9.7cqw;
+  color: var(--theme-color-1);
+  font-weight: 400;
+  margin: 0;
+  line-height: 7cqw;
+  position: relative;
+
+ 
+  span:last-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: linear-gradient(var(--theme-color-2) 70%, var(--theme-color-1) 95%, var(--theme-color-1) 100%);
+    -webkit-text-stroke: 0.01em var(--theme-color-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  
+  }
+    
+  @media (max-width: 900px) {
+    font-size: 28.2cqw;
+    line-height: 22cqw;
+  }
+  
+    @media (max-width: 600px) {
+    font-size: 28.2cqw;
+    line-height: 22cqw;
+  }
+}
+
+h2 {
+  font-size: 5.37cqw;
+  background: linear-gradient(var(--theme-color-4) 40%, var(--theme-color-2) 70%, var(--theme-color-2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 6cqw;
+  -webkit-text-stroke: 0.01em var(--theme-color-1);
+  
+  @media (max-width: 900px) {
+    font-size: 15.4cqw;
+    line-height: 16cqw;
+  }
+  
+  @media (max-width: 600px) {
+     font-size: 15.5cqw;
+    line-height: 16.5cqw;
+  }
+}
+
+#highlight-dates {
+  list-style: none;
+  color: var(--theme-color-1);
+  font-size: 3cqw;
+  text-align: right;
+  margin-right: .3cqw;
+  margin-top: 4px;
+  line-height: 3cqw;
+  font-weight: 400;
+  padding-left: 0;
+  border-top: 1px solid #3E3E3E;
+  margin-bottom: 20px;
+  
+  @media (max-width: 900px) {
+    font-size: 8cqw;
+    line-height: 7cqw;
+    margin-right: 3cqw;
+    margin-bottom: 6px;
+  }
+}
+
+#songDiv {
+  margin-top:6px;
+  border-left: 1px solid #3E3E3E;
+  
+   @media (max-width: 900px) {
+    border-left: none;
+    border-top: 1px solid #3E3E3E;
+  }
+}
+
+#song-output {
+  all: unset;
+  container-type: inline-size;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  list-style: none;  
+  margin: 0 .4cqw;
+  
+  
+  @media (max-width: 900px) {
+    margin-top: 1cqw;
+  }
+
+  
+  li {
+    color: #323143;
+    font-size: 3.7cqw;
+    line-height: 3.74cqw;
+    margin-right: 1rem;
+    margin-left: .2cqw;
+    -webkit-text-stroke: 1px #1a1a1e;
+    text-shadow: 0px 0px 10px #1a1a1e;
+  }
+}
