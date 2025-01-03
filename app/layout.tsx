@@ -1,22 +1,21 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
-import { Vina_Sans } from 'next/font/google';
-
+import { Vina_Sans } from "next/font/google";
 
 import { Providers } from "./providers";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { AuthProvider } from "@/contexts/auth-context";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 
 const vinaSans = Vina_Sans({
-  subsets: ['latin'],
-  weight: '400',
-  display: 'swap',
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
 });
-
 
 export const metadata: Metadata = {
   title: {
@@ -50,15 +49,17 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <Providers>
-          <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl flex-grow px-6 pt-0">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </Providers>
+        <AuthProvider>
+          <Providers>
+            <div className="relative flex flex-col h-screen">
+              <Navbar />
+              <main className="container mx-auto max-w-7xl flex-grow px-6 pt-0">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </Providers>
+        </AuthProvider>
       </body>
     </html>
   );

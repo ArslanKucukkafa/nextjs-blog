@@ -1,24 +1,26 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { Form, Input, Button } from '@nextui-org/react';
-import { Chip } from '@nextui-org/chip';
-import MarkdownIt from 'markdown-it';
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import { Form, Input, Button } from "@nextui-org/react";
+import { Chip } from "@nextui-org/chip";
+import MarkdownIt from "markdown-it";
 
-const MarkdownEditor = dynamic(() => import('react-markdown-editor-lite'), { ssr: false });
-import 'react-markdown-editor-lite/lib/index.css';
+const MarkdownEditor = dynamic(() => import("react-markdown-editor-lite"), {
+  ssr: false,
+});
+import "react-markdown-editor-lite/lib/index.css";
 
 const mdParser = new MarkdownIt();
 
 const ArticleCreate: React.FC = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [tags, setTags] = useState<string[]>([]);
-  const [newTag, setNewTag] = useState('');
-  const [previewContent, setPreviewContent] = useState('');
+  const [newTag, setNewTag] = useState("");
+  const [previewContent, setPreviewContent] = useState("");
   const [action, setAction] = useState<string | null>(null);
 
   const handleEditorChange = ({ text }: { text: string }) => {
@@ -28,7 +30,7 @@ const ArticleCreate: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const date = new Date().toISOString().split('T')[0]; // Tarih formatı YYYY-MM-DD
+    const date = new Date().toISOString().split("T")[0]; // Tarih formatı YYYY-MM-DD
     const articleData = {
       title,
       description,
@@ -38,7 +40,7 @@ const ArticleCreate: React.FC = () => {
       tags,
     };
 
-    console.log('Makale Verisi:', articleData);
+    console.log("Makale Verisi:", articleData);
     setAction(`submit ${JSON.stringify(articleData)}`);
     // Burada makale verisini sunucuya gönderebilirsiniz
   };
@@ -46,12 +48,12 @@ const ArticleCreate: React.FC = () => {
   const addTag = () => {
     if (newTag && !tags.includes(newTag)) {
       setTags([...tags, newTag]);
-      setNewTag('');
+      setNewTag("");
     }
   };
 
   const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
   const clearTags = () => {
@@ -94,7 +96,7 @@ const ArticleCreate: React.FC = () => {
           <label className="block text-lg">İçerik:</label>
           <MarkdownEditor
             value={content}
-            style={{ height: '400px' }}
+            style={{ height: "400px" }}
             renderHTML={(text) => mdParser.render(text)}
             onChange={handleEditorChange}
           />
@@ -111,7 +113,9 @@ const ArticleCreate: React.FC = () => {
           <label className="block text-lg">Etiketler:</label>
           <div className="flex gap-2 mb-2">
             {tags.map((tag, index) => (
-              <Chip key={index} onClick={() => removeTag(tag)}>{tag}</Chip>
+              <Chip key={index} onClick={() => removeTag(tag)}>
+                {tag}
+              </Chip>
             ))}
           </div>
           <div className="flex gap-2">
@@ -121,7 +125,7 @@ const ArticleCreate: React.FC = () => {
               value={newTag}
               onChange={(e) => setNewTag(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === "Enter") {
                   addTag();
                 }
               }}
@@ -139,7 +143,12 @@ const ArticleCreate: React.FC = () => {
           <Button color="primary" type="submit" className="w-full text-sm">
             Makale Oluştur
           </Button>
-          <Button type="reset" variant="flat" onClick={() => setAction(null)} className="w-full text-sm">
+          <Button
+            type="reset"
+            variant="flat"
+            onClick={() => setAction(null)}
+            className="w-full text-sm"
+          >
             Reset
           </Button>
         </div>

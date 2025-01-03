@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { useAuth } from "@/contexts/auth-context"
 import { Card, CardBody } from "@nextui-org/react";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function DashboardPage() {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   return (
     <div className="space-y-8">
@@ -15,5 +15,5 @@ export default function DashboardPage() {
         </CardBody>
       </Card>
     </div>
-  )
-} 
+  );
+}

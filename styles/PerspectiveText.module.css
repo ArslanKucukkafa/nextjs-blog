@@ -1,0 +1,64 @@
+@import url(https://fonts.bunny.net/css?family=bai-jamjuree:300,600,700);
+
+.layeredText {
+  --txt-cta: rgb(2, 132, 199);
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  display: grid;
+  place-content: center;
+  overflow: hidden;
+  height: auto;
+  background-color: hsl(var(--background));
+}
+
+.text {
+  color: hsl(var(--foreground));
+  font-family: "Bai Jamjuree", sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 0.75;
+}
+
+.textIndent {
+  composes: text;
+  text-indent: 35px;
+  margin-bottom: -1px;
+}
+
+.shadow {
+  composes: text;
+  text-transform: uppercase;
+  font-size: 6rem;
+  position: relative;
+  perspective: 100px;
+  font-weight: 800;
+  color: var(--txt-cta);
+}
+
+.shadow::before {
+  content: "PERSPECTIVE";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  scale: 1 -1;
+  opacity: 0.25;
+  color: hsl(var(--foreground));
+  z-index: -1;
+  transform: rotateX(-40deg) scaleX(123%);
+}
+
+.shadow::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -50%;
+  width: 200%;
+  height: 150%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    hsl(var(--background)) 85%
+  );
+}
