@@ -66,17 +66,12 @@ const ProjectList = () => {
         });
       } catch (error) {
         console.error("Error fetching projects:", error);
-        setError(
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred while fetching projects",
-        );
-        setProjects([]);
+        setError("Failed to load projects");
       } finally {
         setIsLoading(false);
       }
     },
-    [selectedTags, searchQuery, sortOrder, pageInfo.pageSize],
+    [pageInfo.pageSize, sortOrder, selectedTags, searchQuery],
   );
 
   useEffect(() => {

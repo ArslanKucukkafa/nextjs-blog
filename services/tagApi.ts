@@ -1,5 +1,5 @@
 import axios from "axios";
-import envConfig from "../env.config";
+import envConfig from "../env.config.js";
 const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");
 
 export const tagApi = {

@@ -15,7 +15,7 @@ const environments = {
 const env = process.env.NODE_ENV || "development";
 
 // Export configuration
-module.exports = {
+const envConfig = {
   ...environments[env],
 
   // Additional method to get environment-specific config
@@ -23,3 +23,5 @@ module.exports = {
     return environments[env][key] || process.env[key];
   },
 };
+
+export default envConfig;

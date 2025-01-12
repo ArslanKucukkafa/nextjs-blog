@@ -1,6 +1,6 @@
 import axios from "axios";
 import { HeroText } from "./types/heroText";
-import envConfig from "../env.config";
+import envConfig from "../env.config.js";
 
 // Use the environment-specific configuration
 const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");

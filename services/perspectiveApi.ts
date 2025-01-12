@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Perspective } from "@/app/perspectives/types";
-import envConfig from "../env.config";
+import envConfig from "../env.config.js";
 
 const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");
 

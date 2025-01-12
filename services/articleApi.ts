@@ -1,5 +1,5 @@
 import axios from "axios";
-import envConfig from "@/env.config";
+import envConfig from "@/env.config.js";
 
 export interface Article {
   id: string;

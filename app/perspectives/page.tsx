@@ -60,17 +60,12 @@ const PerspectiveList = () => {
         });
       } catch (error) {
         console.error("Error fetching perspectives:", error);
-        setError(
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred while fetching perspectives",
-        );
-        setPerspectives([]);
+        setError("Failed to load perspectives");
       } finally {
         setIsLoading(false);
       }
     },
-    [selectedTags, searchQuery, sortOrder, pageInfo.pageSize],
+    [pageInfo.pageSize, sortOrder, selectedTags, searchQuery],
   );
 
   useEffect(() => {

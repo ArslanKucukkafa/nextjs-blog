@@ -1,11 +1,12 @@
 {
-  "name": "next-app-template",
-  "version": "0.0.1",
+  "name": "nextui-blog",
+  "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development next dev",
-    "build": "NODE_ENV=production next build",
-    "start": "NODE_ENV=production next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .next && rm -rf node_modules && npm install",
     "env:debug": "node env-debug.js"
@@ -25,7 +26,6 @@
     "@nextui-org/theme": "2.4.1",
     "@react-aria/ssr": "3.9.7",
     "@react-aria/visually-hidden": "3.8.18",
-    "@tailwindcss/typography": "^0.5.16",
     "@types/markdown-it": "^14.1.2",
     "@types/nodemailer": "^6.4.17",
     "@types/prismjs": "^1.26.5",
@@ -55,6 +55,7 @@
   "devDependencies": {
     "@next/eslint-plugin-next": "15.0.4",
     "@react-types/shared": "3.25.0",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/jquery": "^3.5.32",
     "@types/node": "20.5.7",
     "@types/react": "18.3.3",
@@ -78,5 +79,8 @@
     "tailwind-variants": "0.1.20",
     "tailwindcss": "3.4.16",
     "typescript": "5.6.3"
+  },
+  "nextConfig": {
+    "configFile": "./next.config.cjs"
   }
 }

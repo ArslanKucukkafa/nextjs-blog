@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -104,64 +104,9 @@ const DeleteIcon = (props: IconProps) => (
 
 export default function ArticleListPage() {
   const router = useRouter();
-  const [articles, setArticles] = React.useState<Article[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const response = await articleApi.searchArticles({
-          pageCount: 0,
-          pageSize: 10,
-          sortType: "ASC",
-        });
-
-        // API'den gelen veriyi Article tipine dönüştür
-        const formattedArticles = response.content.map((article) => ({
-          ...article,
-          id: article.id,
-          date: new Date(article.createdAt),
-          image: article.imageUrl || "",
-          title: article.title,
-          description: article.description,
-          content: article.content,
-          tags: article.tags || [],
-        }));
-
-        setArticles(formattedArticles);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching articles:", error);
-        setError(
-          error instanceof Error ? error.message : "An unknown error occurred",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
-  }, []);
-
-  if (loading) {
-    return <div>Loading articles...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="text-red-500 p-4 bg-red-50 rounded">
-        <p>Failed to load articles:</p>
-        <p>{error}</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDelete = useCallback(async (id: string) => {
     try {
@@ -234,6 +179,61 @@ export default function ArticleListPage() {
     },
     [router, handleDelete],
   );
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await articleApi.searchArticles({
+          pageCount: 0,
+          pageSize: 10,
+          sortType: "ASC",
+        });
+
+        // API'den gelen veriyi Article tipine dönüştür
+        const formattedArticles = response.content.map((article) => ({
+          ...article,
+          id: article.id,
+          date: new Date(article.createdAt),
+          image: article.imageUrl || "",
+          title: article.title,
+          description: article.description,
+          content: article.content,
+          tags: article.tags || [],
+        }));
+
+        setArticles(formattedArticles);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+        setError(
+          error instanceof Error ? error.message : "An unknown error occurred",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  if (loading) {
+    return <div>Loading articles...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-500 p-4 bg-red-50 rounded">
+        <p>Failed to load articles:</p>
+        <p>{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

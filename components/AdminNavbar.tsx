@@ -12,30 +12,19 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { useFullAuthStore } from "@/store/authStore";
 import { authApi } from "@/services/authApi";
 
 export default function AdminNavbar() {
-  const router = useRouter();
   const { clearToken } = useFullAuthStore();
 
   const handleLogout = async () => {
     try {
-      // 1. Backend'e logout isteği gönder
       await authApi.logout();
-
-      // 2. Zustand store'u temizle
       clearToken();
-
-      // 3. LocalStorage'ı temizle
-      localStorage.removeItem("auth-storage");
-
-      // 4. Auth sayfasına yönlendir
-      window.location.replace("/auth");
+      window.location.href = "/login";
     } catch (error) {
-      console.error("Çıkış yaparken hata:", error);
-      window.location.replace("/auth");
+      console.error("Logout failed", error);
     }
   };
 

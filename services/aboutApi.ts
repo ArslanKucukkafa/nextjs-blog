@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Education, Experience, Skill } from "./types";
-import envConfig from "../env.config";
+import envConfig from "../env.config.js";
 // About interface'ini export et
 export interface About {
   id: string;

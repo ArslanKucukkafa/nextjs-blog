@@ -1,7 +1,8 @@
 import { nextui } from "@nextui-org/theme";
+import typography from '@tailwindcss/typography';
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -20,34 +21,8 @@ module.exports = {
             a: {
               color: '#3b82f6',
               '&:hover': {
-                color: '#60a5fa',
+                color: '#2563eb',
               },
-            },
-            h1: {
-              color: '#fff',
-            },
-            h2: {
-              color: '#fff',
-            },
-            h3: {
-              color: '#fff',
-            },
-            h4: {
-              color: '#fff',
-            },
-            code: {
-              color: '#fff',
-              backgroundColor: '#1f2937',
-              padding: '0.2em 0.4em',
-              borderRadius: '0.3em',
-            },
-            'pre code': {
-              backgroundColor: 'transparent',
-              padding: 0,
-            },
-            pre: {
-              backgroundColor: '#1f2937',
-              color: '#fff',
             },
           },
         },
@@ -55,5 +30,31 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [nextui(), require('@tailwindcss/typography')],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            background: "#FFFFFF",
+            foreground: "#11181C",
+            primary: {
+              foreground: "#FFFFFF",
+              DEFAULT: "#006FEE",
+            },
+          },
+        },
+        dark: {
+          colors: {
+            background: "#000000",
+            foreground: "#ECEDEE",
+            primary: {
+              foreground: "#FFFFFF",
+              DEFAULT: "#006FEE",
+            },
+          },
+        },
+      },
+    }),
+    typography,
+  ],
 };
