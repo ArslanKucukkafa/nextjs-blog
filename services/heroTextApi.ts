@@ -18,9 +18,29 @@ const getHeaders = () => {
   return {
     Accept: "*/*",
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*", // CORS için ek başlık
     ...(token && { Authorization: `Bearer ${token}` }),
   };
+};
+
+// Hata detaylarını loglamak için yardımcı fonksiyon
+const logErrorDetails = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    console.error("Axios Error Details:", {
+      message: error.message,
+      code: error.code,
+      status: error.response?.status,
+      data: error.response?.data,
+      url: error.config?.url,
+      method: error.config?.method,
+    });
+  } else if (error instanceof Error) {
+    console.error("Standard Error:", {
+      message: error.message,
+      stack: error.stack,
+    });
+  } else {
+    console.error("Unknown Error:", error);
+  }
 };
 
 export const heroTextApi = {
@@ -28,32 +48,26 @@ export const heroTextApi = {
     try {
       console.log(
         "Attempting to fetch Hero Text from:",
-        `${API_URL}/hero-text`
+        `${API_URL}/hero-text`,
       );
 
       const response = await axios.get<HeroText>(`${API_URL}/hero-text`, {
         headers: getHeaders(),
         timeout: 10000, // 10 saniye timeout
-        withCredentials: true, // CORS için kimlik bilgilerini dahil et
       });
 
       console.log("Hero Text Response:", response.data);
       return response.data;
-    } catch (error) {
-      console.error("Comprehensive Hero Text Fetch Error:", {
-        fullError: error,
-        message: error.message,
-        code: error.code,
-        config: error.config,
-        responseData: error.response?.data,
-        responseStatus: error.response?.status,
-        responseHeaders: error.response?.headers,
-      });
+    } catch (error: unknown) {
+      // Hata detaylarını log et
+      logErrorDetails(error);
 
       // Detaylı hata mesajı oluştur
       const errorMessage = axios.isAxiosError(error)
         ? `Network Error: ${error.message} (${error.code})`
-        : `Unexpected Error: ${error.message}`;
+        : error instanceof Error
+          ? `Unexpected Error: ${error.message}`
+          : "Unknown error occurred";
 
       // Hata detaylarını içeren özel bir hata nesnesi oluştur
       throw new Error(errorMessage);
@@ -70,27 +84,21 @@ export const heroTextApi = {
         {
           headers: getHeaders(),
           timeout: 10000, // 10 saniye timeout
-          withCredentials: true, // CORS için kimlik bilgilerini dahil et
-        }
+        },
       );
 
       console.log("Hero Text Update Response:", response.data);
       return response.data;
-    } catch (error) {
-      console.error("Comprehensive Hero Text Update Error:", {
-        fullError: error,
-        message: error.message,
-        code: error.code,
-        config: error.config,
-        responseData: error.response?.data,
-        responseStatus: error.response?.status,
-        responseHeaders: error.response?.headers,
-      });
+    } catch (error: unknown) {
+      // Hata detaylarını log et
+      logErrorDetails(error);
 
       // Detaylı hata mesajı oluştur
       const errorMessage = axios.isAxiosError(error)
         ? `Network Error: ${error.message} (${error.code})`
-        : `Unexpected Error: ${error.message}`;
+        : error instanceof Error
+          ? `Unexpected Error: ${error.message}`
+          : "Unknown error occurred";
 
       // Hata detaylarını içeren özel bir hata nesnesi oluştur
       throw new Error(errorMessage);

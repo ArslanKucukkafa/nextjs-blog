@@ -58,7 +58,7 @@ axios.defaults.withCredentials = true; // Enable sending cookies
 export const projectApi = {
   // Search projects with filters
   searchProjects: async (
-    params: SearchProjectsParams = {}
+    params: SearchProjectsParams = {},
   ): Promise<ProjectResponse> => {
     try {
       const {
@@ -83,7 +83,7 @@ export const projectApi = {
         {
           headers: getHeaders(),
           timeout: 5000, // 5 seconds timeout for this specific request
-        }
+        },
       );
       return response.data;
     } catch (error) {
@@ -109,13 +109,13 @@ export const projectApi = {
               throw new Error("Internal server error");
             default:
               throw new Error(
-                error.response.data?.message || "Network error occurred"
+                error.response.data?.message || "Network error occurred",
               );
           }
         } else if (error.request) {
           // The request was made but no response was received
           throw new Error(
-            "No response from server. Check your network connection."
+            "No response from server. Check your network connection.",
           );
         } else {
           // Something happened in setting up the request
@@ -150,7 +150,7 @@ export const projectApi = {
           }
           return acc;
         },
-        {} as Record<string, unknown>
+        {} as Record<string, unknown>,
       );
 
       console.log("API Request:", {
@@ -164,7 +164,7 @@ export const projectApi = {
         {
           headers: getHeaders(),
           timeout: 10000, // 10 seconds timeout
-        }
+        },
       );
 
       // Log response for debugging
@@ -194,7 +194,7 @@ export const projectApi = {
   // Update project visibility
   updateProjectVisibility: async (
     id: string,
-    isVisible: boolean
+    isVisible: boolean,
   ): Promise<void> => {
     try {
       await axios.put(`${API_URL}/projects/visibility`, null, {
@@ -212,7 +212,8 @@ export const projectApi = {
           }
         }
         throw new Error(
-          error.response?.data?.message || "Failed to update project visibility"
+          error.response?.data?.message ||
+            "Failed to update project visibility",
         );
       }
       throw error;
@@ -250,7 +251,7 @@ export const projectApi = {
           }
         }
         throw new Error(
-          error.response?.data?.message || "Failed to delete project"
+          error.response?.data?.message || "Failed to delete project",
         );
       }
       throw error;
@@ -278,7 +279,7 @@ export const projectApi = {
           }
         }
         throw new Error(
-          error.response?.data?.message || "Failed to sync projects"
+          error.response?.data?.message || "Failed to sync projects",
         );
       }
       throw error;

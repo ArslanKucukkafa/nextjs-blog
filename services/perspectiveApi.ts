@@ -40,7 +40,7 @@ interface SearchPerspectivesParams {
 
 export const perspectiveApi = {
   searchPerspectives: async (
-    params: SearchPerspectivesParams = {}
+    params: SearchPerspectivesParams = {},
   ): Promise<PerspectiveResponse> => {
     try {
       const {
@@ -65,7 +65,7 @@ export const perspectiveApi = {
         {
           headers: getHeaders(),
           timeout: 5000, // 5 seconds timeout
-        }
+        },
       );
       return response.data;
     } catch (error) {
@@ -91,13 +91,13 @@ export const perspectiveApi = {
               throw new Error("Internal server error");
             default:
               throw new Error(
-                error.response.data?.message || "Network error occurred"
+                error.response.data?.message || "Network error occurred",
               );
           }
         } else if (error.request) {
           // The request was made but no response was received
           throw new Error(
-            "No response from server. Check your network connection."
+            "No response from server. Check your network connection.",
           );
         } else {
           // Something happened in setting up the request
@@ -121,7 +121,7 @@ export const perspectiveApi = {
   },
 
   createPerspective: async (
-    perspective: Omit<Perspective, "id">
+    perspective: Omit<Perspective, "id">,
   ): Promise<Perspective> => {
     try {
       const response = await axios.post(
@@ -129,7 +129,7 @@ export const perspectiveApi = {
         perspective,
         {
           headers: getHeaders(),
-        }
+        },
       );
       return response.data;
     } catch (error) {
@@ -154,7 +154,7 @@ export const perspectiveApi = {
           }
         }
         throw new Error(
-          error.response?.data?.message || "Failed to delete perspective"
+          error.response?.data?.message || "Failed to delete perspective",
         );
       }
       throw error;
@@ -179,7 +179,7 @@ export const perspectiveApi = {
           }
         }
         throw new Error(
-          error.response?.data?.message || "Failed to update perspective"
+          error.response?.data?.message || "Failed to update perspective",
         );
       }
       throw error;

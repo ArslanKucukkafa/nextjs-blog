@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
   // Cookie'den token'ı al
   const cookies = document.cookie.split(";");
   const accessToken = cookies.find((cookie) =>
-    cookie.trim().startsWith("access_token=")
+    cookie.trim().startsWith("access_token="),
   );
 
   if (accessToken) {
@@ -40,7 +40,7 @@ api.interceptors.response.use(
       message: error.message,
     });
     throw error;
-  }
+  },
 );
 
 export const authApi = {

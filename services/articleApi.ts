@@ -49,7 +49,7 @@ interface SearchArticlesParams {
 
 export const articleApi = {
   searchArticles: async (
-    params: SearchArticlesParams = {}
+    params: SearchArticlesParams = {},
   ): Promise<ArticleResponse> => {
     try {
       const {
@@ -74,7 +74,7 @@ export const articleApi = {
         {
           headers: getHeaders(),
           timeout: 5000, // 5 seconds timeout
-        }
+        },
       );
       return response.data;
     } catch (error) {
@@ -100,13 +100,13 @@ export const articleApi = {
               throw new Error("Internal server error");
             default:
               throw new Error(
-                error.response.data?.message || "Network error occurred"
+                error.response.data?.message || "Network error occurred",
               );
           }
         } else if (error.request) {
           // The request was made but no response was received
           throw new Error(
-            "No response from server. Check your network connection."
+            "No response from server. Check your network connection.",
           );
         } else {
           // Something happened in setting up the request
@@ -131,13 +131,13 @@ export const articleApi = {
 
   updateArticleVisibility: async (
     id: string,
-    visible: boolean
+    visible: boolean,
   ): Promise<Article> => {
     try {
       const response = await axios.patch(
         `${API_URL}/articles/${id}/visibility`,
         { visible },
-        { headers: getHeaders() }
+        { headers: getHeaders() },
       );
       return response.data;
     } catch (error) {
@@ -176,7 +176,7 @@ export const articleApi = {
           }
         }
         throw new Error(
-          error.response?.data?.message || "Failed to update article"
+          error.response?.data?.message || "Failed to update article",
         );
       }
       throw error;
@@ -200,7 +200,7 @@ export const articleApi = {
           }
         }
         throw new Error(
-          error.response?.data?.message || "Failed to delete article"
+          error.response?.data?.message || "Failed to delete article",
         );
       }
       throw error;
