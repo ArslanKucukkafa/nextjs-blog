@@ -34,7 +34,7 @@ const PerspectiveText = () => {
     if (heroText) {
       document.documentElement.style.setProperty(
         "--hero-text",
-        `"${heroText.heroText}"`,
+        `"${heroText.heroText}"`
       );
     }
   }, [heroText]);
