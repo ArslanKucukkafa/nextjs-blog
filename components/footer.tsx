@@ -60,34 +60,10 @@ export const Footer = () => {
           <ul className="flex justify-center space-x-6">
             <li>
               <Link
-                href="/about"
+                href="/"
                 className="text-sm text-default-500 hover:text-default-900"
               >
-                About
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/blog"
-                className="text-sm text-default-500 hover:text-default-900"
-              >
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/projects"
-                className="text-sm text-default-500 hover:text-default-900"
-              >
-                Projects
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/contact"
-                className="text-sm text-default-500 hover:text-default-900"
-              >
-                Contact
+                ARSLAN KUCUKKAFA
               </Link>
             </li>
           </ul>

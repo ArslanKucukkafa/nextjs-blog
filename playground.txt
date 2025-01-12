@@ -1,3 +1,9 @@
+Filter Component: 
+1- Tarihe göre sıralama
+2- Tag'e göre filtreleme
+3- Article-Perspectives-Projects içinde arama  
+
+
 import {Select, SelectItem} from "@nextui-org/react";
 
 export const animals = [
@@ -19,12 +25,15 @@ export const animals = [
 export default function App() {
   return (
     <Select
+      isRequired
       className="max-w-xs"
-      items={animals}
+      defaultSelectedKeys={["cat"]}
       label="Favorite Animal"
       placeholder="Select an animal"
     >
-      {(animal) => <SelectItem>{animal.label}</SelectItem>}
+      {animals.map((animal) => (
+        <SelectItem key={animal.key}>{animal.label}</SelectItem>
+      ))}
     </Select>
   );
 }

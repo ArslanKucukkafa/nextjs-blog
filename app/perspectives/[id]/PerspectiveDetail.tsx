@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { formatDate } from "@/utils/formatDate";
 import { useParams } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import {
   Card,
   CardHeader,
@@ -13,16 +12,39 @@ import {
   Chip,
   Button,
 } from "@nextui-org/react";
-import { perspectives } from "../types";
+import { getPerspectiveById } from "@/services/perspectiveApi";
+import { Perspective } from "@/app/perspectives/types";
+import { MarkdownViewer } from "@/components/markdown-viewer";
 
 const PerspectiveDetail: React.FC = () => {
   const params = useParams();
   const id = params?.id as string;
+  const [perspective, setPerspective] = useState<Perspective | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const perspective = perspectives.find((p) => p.id === Number(id));
+  useEffect(() => {
+    const fetchPerspective = async () => {
+      try {
+        const data = await getPerspectiveById(id);
+        setPerspective(data);
+      } catch (err) {
+        setError("Failed to load perspective");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  if (!perspective) {
-    return <p>Perspektif bulunamadı.</p>;
+    fetchPerspective();
+  }, [id]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error || !perspective) {
+    return <div>Error: {error || "Perspective not found"}</div>;
   }
 
   return (
@@ -32,29 +54,31 @@ const PerspectiveDetail: React.FC = () => {
           <h2 className="text-2xl text-blue-500 font-bold">
             {perspective.title}
           </h2>
-          <div className="flex items-center justify-center gap-2">
-            <Chip
-              variant="flat"
-              color={perspective.isResult ? "success" : "danger"}
-              className="text-sm"
-            >
-              Sonuç: {perspective.isResult ? "Mevcut" : "Henüz Yok"}
-            </Chip>
-          </div>
+          <p className="text-gray-500">{formatDate(perspective.createdAt)}</p>
         </CardHeader>
         <Divider />
         <CardBody className="space-y-6">
-          <div className="text-center">
+          <div className="text-left">
+            <h3 className="text-xl font-semibold mb-2 text-blue-500">
+              Short Description
+            </h3>
             <p className="text-lg font-medium mb-4">
               {perspective.shortDescription}
             </p>
-            <div className="prose prose-sm max-w-none text-gray-600 mx-auto prose-table:mx-auto prose-p:text-center prose-headings:text-center">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {perspective.content}
-              </ReactMarkdown>
+            <Divider />
+            <div className="text-left">
+              <h3 className="text-xl font-semibold mb-2 text-blue-500">
+                Content
+              </h3>
+              <MarkdownViewer content={perspective.content} />
             </div>
           </div>
-
+          <Divider />
+          <div className="text-left">
+            <h3 className="text-xl font-semibold mb-2 text-blue-500">Result</h3>
+            <p>{perspective.result}</p>
+          </div>
+          <Divider />
           <div className="flex justify-center space-x-2">
             {perspective.tags.map((tag, index) => (
               <Chip key={index} color="warning" variant="shadow">
@@ -62,22 +86,11 @@ const PerspectiveDetail: React.FC = () => {
               </Chip>
             ))}
           </div>
-
-          <p className="text-gray-500 text-center">
-            {perspective.date.toLocaleDateString()}
-          </p>
-
-          {perspective.isResult && perspective.result && (
-            <div className="mt-8 p-4 rounded-lg text-center">
-              <h3 className="text-xl font-bold mb-4">
-                📊 Sonuç Değerlendirmesi
-              </h3>
-              <p className="text-gray-600 italic">{perspective.result}</p>
-            </div>
-          )}
         </CardBody>
         <CardFooter className="flex justify-center">
-          <Button onPress={() => window.history.back()}>Geri Dön</Button>
+          <Button onPress={() => window.history.back()} color="primary">
+            Back
+          </Button>
         </CardFooter>
       </Card>
     </div>

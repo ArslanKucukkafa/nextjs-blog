@@ -13,8 +13,47 @@ module.exports = {
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            color: '#fff',
+            a: {
+              color: '#3b82f6',
+              '&:hover': {
+                color: '#60a5fa',
+              },
+            },
+            h1: {
+              color: '#fff',
+            },
+            h2: {
+              color: '#fff',
+            },
+            h3: {
+              color: '#fff',
+            },
+            h4: {
+              color: '#fff',
+            },
+            code: {
+              color: '#fff',
+              backgroundColor: '#1f2937',
+              padding: '0.2em 0.4em',
+              borderRadius: '0.3em',
+            },
+            'pre code': {
+              backgroundColor: 'transparent',
+              padding: 0,
+            },
+            pre: {
+              backgroundColor: '#1f2937',
+              color: '#fff',
+            },
+          },
+        },
+      },
     },
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [nextui(), require('@tailwindcss/typography')],
 };

@@ -1,5 +1,5 @@
 export interface Article {
-  id: number;
+  id: string;
   title: string;
   description: string;
   content: string;
@@ -10,7 +10,7 @@ export interface Article {
 
 export const articles: Article[] = [
   {
-    id: 1,
+    id: "677efa870c2bd6253484ce46",
     title: "İlk Makale",
     description: "Bu, ilk makalenin kısa açıklamasıdır.",
     content: `

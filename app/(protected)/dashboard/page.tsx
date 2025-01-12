@@ -1,17 +1,16 @@
 "use client";
 
 import { Card, CardBody } from "@nextui-org/react";
-import { useAuth } from "@/contexts/auth-context";
 
 export default function DashboardPage() {
-  const { user } = useAuth();
-
   return (
-    <div className="space-y-8">
-      <h1 className="text-4xl font-bold">Dashboard</h1>
-      <Card>
-        <CardBody>
-          <p>Welcome back, {user?.name}!</p>
+    <div className="flex flex-col items-center justify-center min-h-[80vh] p-4">
+      <Card className="w-full max-w-lg">
+        <CardBody className="text-center">
+          <h1 className="text-4xl font-bold mb-4">Merhaba Arslan 👋</h1>
+          <p className="text-lg text-default-600">
+            Dashboard sayfasına hoş geldiniz!
+          </p>
         </CardBody>
       </Card>
     </div>

@@ -255,3 +255,29 @@ export const NextUILogo: React.FC<IconSvgProps> = (props) => {
     </svg>
   );
 };
+
+export const MarkdownIcon = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}: IconSvgProps) => (
+  <svg
+    width={size || width}
+    height={size || height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18ZM3.44 7.17C3.31 7.17 3.21 7.27 3.21 7.41V16.59C3.21 16.73 3.31 16.83 3.44 16.83H20.56C20.69 16.83 20.79 16.73 20.79 16.59V7.41C20.79 7.27 20.69 7.17 20.56 7.17H3.44Z"
+      fill="currentColor"
+    />
+    <path
+      d="M4.5 8.25V15.75H7V11.25L9.5 14.25L12 11.25V15.75H14.5V8.25H12L9.5 11.25L7 8.25H4.5Z"
+      fill="currentColor"
+    />
+    <path d="M19.5 13.5H16.5V8.25H15V15.75H19.5V13.5Z" fill="currentColor" />
+  </svg>
+);
