@@ -1,6 +1,8 @@
 import axios from "axios";
 import { Education, Experience, Skill } from "./types";
 import envConfig from "../env.config.js";
+import { authStore } from "@/store/authStore";
+
 // About interface'ini export et
 export interface About {
   id: string;
@@ -21,18 +23,11 @@ const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");
 
 // Helper function to get headers with token
 const getHeaders = () => {
-  let token;
-  if (typeof window !== "undefined") {
-    token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("access_token="))
-      ?.split("=")[1];
-  }
-
+  const token = authStore.getState().token;
   return {
     Accept: "*/*",
     "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
+    ...(token && { Authorization: token }),
   };
 };
 

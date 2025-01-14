@@ -1,52 +1,48 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
-
-type User = {
-  id: string;
-  email: string;
-  name: string;
-};
+import { createContext, useContext } from "react";
+import { authStore } from "@/store/authStore";
+import { authApi } from "@/services/authApi";
 
 type AuthContextType = {
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  token: string | null;
+  login: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const token = authStore((state) => state.token);
 
-  const login = async (email: string, password: string) => {
-    // API call to backend
-    const response = await fetch("/api/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) throw new Error("Login failed");
-
-    const userData = await response.json();
-    setUser(userData);
+  const login = async () => {
+    try {
+      const loginUrl = await authApi.githubLogin();
+      window.location.href = loginUrl;
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
-  const logout = () => {
-    setUser(null);
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout: handleLogout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
+}

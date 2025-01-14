@@ -1,19 +1,23 @@
 import axios from "axios";
+import { Project } from "@/app/projects/types";
 import envConfig from "../env.config.js";
+import { authStore } from "@/store/authStore";
 
-export interface Project {
-  id: string;
-  createdAt?: string;
-  tags: string[];
-  name: string;
-  description: string;
-  fullName: string;
-  imageUrl: string | null;
-  visible: boolean;
-  readmeUrl: string;
-  readme: string;
-  url: string;
-}
+const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");
+
+// Helper function to get headers with token
+const getHeaders = () => {
+  const token = authStore.getState().token;
+  return {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+    ...(token && { Authorization: token }),
+  };
+};
+
+// Configure axios defaults
+axios.defaults.timeout = 10000; // 10 seconds timeout
+axios.defaults.withCredentials = true; // Enable sending cookies
 
 interface ProjectResponse {
   content: Project[];
@@ -31,29 +35,6 @@ interface SearchProjectsParams {
   tags?: string[];
   visible?: boolean;
 }
-
-const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");
-
-// Helper function to get headers with token
-const getHeaders = () => {
-  let token;
-  if (typeof window !== "undefined") {
-    token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("access_token="))
-      ?.split("=")[1];
-  }
-
-  return {
-    Accept: "*/*",
-    "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
-  };
-};
-
-// Configure axios defaults
-axios.defaults.timeout = 10000; // 10 seconds timeout
-axios.defaults.withCredentials = true; // Enable sending cookies
 
 export const projectApi = {
   // Search projects with filters
@@ -98,8 +79,7 @@ export const projectApi = {
           switch (error.response.status) {
             case 401:
               if (typeof window !== "undefined") {
-                document.cookie =
-                  "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                authStore.getState().clearToken();
                 window.location.href = "/auth";
               }
               throw new Error("Unauthorized access");
@@ -179,8 +159,7 @@ export const projectApi = {
         }
         if (error.response?.status === 401) {
           if (typeof window !== "undefined") {
-            document.cookie =
-              "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            authStore.getState().clearToken();
             window.location.href = "/auth";
           }
         }
@@ -206,8 +185,7 @@ export const projectApi = {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
           if (typeof window !== "undefined") {
-            document.cookie =
-              "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            authStore.getState().clearToken();
             window.location.href = "/auth";
           }
         }
@@ -245,8 +223,7 @@ export const projectApi = {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
           if (typeof window !== "undefined") {
-            document.cookie =
-              "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            authStore.getState().clearToken();
             window.location.href = "/auth";
           }
         }
@@ -273,8 +250,7 @@ export const projectApi = {
         }
         if (error.response?.status === 401) {
           if (typeof window !== "undefined") {
-            document.cookie =
-              "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            authStore.getState().clearToken();
             window.location.href = "/auth";
           }
         }

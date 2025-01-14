@@ -4,7 +4,7 @@ const environments = {
     NEXT_PUBLIC_API_URL: "https://wizarddev-arslan.site",
   },
   production: {
-    NEXT_PUBLIC_API_URL: "https://wizarddev-arslan.site",
+    NEXT_PUBLIC_API_URL: "https://wizarddev-arslan.site", // Production API URL
   },
   test: {
     NEXT_PUBLIC_API_URL: "https://wizarddev-arslan.site",

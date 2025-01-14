@@ -1,5 +1,6 @@
 import axios from "axios";
 import envConfig from "../env.config.js";
+import { authStore } from "@/store/authStore";
 
 const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");
 
@@ -12,101 +13,112 @@ const api = axios.create({
 
 // Request interceptor
 api.interceptors.request.use((config) => {
-  // Cookie'den token'ı al
-  const cookies = document.cookie.split(";");
-  const accessToken = cookies.find((cookie) =>
-    cookie.trim().startsWith("access_token="),
-  );
+  // Auth store'dan token'ı al
+  const state = authStore.getState();
+  const token = state.token;
 
-  if (accessToken) {
-    const token = decodeURIComponent(accessToken.split("=")[1]);
+  if (token) {
     config.headers.Authorization = token;
+    console.log("Adding token to request:", {
+      url: config.url,
+      hasToken: true,
+    });
+  } else {
+    console.log("No token available for request:", config.url);
+    console.log("Current auth state:", {
+      token: token,
+      tokenExists: !!token,
+    });
   }
 
-  console.log("Request URL:", config.url);
   return config;
 });
 
 // Response interceptor for debugging
 api.interceptors.response.use(
   (response) => {
+    console.log("API Response:", {
+      url: response.config.url,
+      status: response.status,
+      hasData: !!response.data,
+    });
     return response;
   },
   (error) => {
     console.error("API Error:", {
       url: error.config?.url,
       status: error.response?.status,
-      data: error.response?.data,
       message: error.message,
     });
-    throw error;
+    return Promise.reject(error);
   },
 );
 
+const githubLogin = async () => {
+  try {
+    // First, get the authorization URL from backend
+    const response = await api.get("/auth/github/login");
+    console.log("Login URL response:", response.data);
+
+    if (response.data?.url) {
+      return response.data.url;
+    }
+
+    // Fallback to direct URL if backend doesn't provide one
+    return `${API_URL}/oauth2/authorization/github`;
+  } catch (error) {
+    console.error("Error getting login URL:", error);
+    // Fallback to direct URL in case of error
+    return `${API_URL}/oauth2/authorization/github`;
+  }
+};
+
+const handleGithubCallback = async (code: string) => {
+  try {
+    console.log("Handling GitHub callback with code:", code);
+    const response = await api.post("/auth/github/callback", { code });
+    console.log("Callback response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error in GitHub callback:", error);
+    throw error;
+  }
+};
+
+const checkAuth = async () => {
+  try {
+    const response = await api.get("/auth/check");
+    console.log("Auth check response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Auth check failed:", error);
+    throw error;
+  }
+};
+
+const logout = async () => {
+  try {
+    await api.post("/auth/logout");
+    // Clear local token
+    authStore.getState().clearToken();
+
+    // Auth sayfasına yönlendir
+    if (typeof window !== "undefined") {
+      window.location.href = "/auth";
+    }
+  } catch (error) {
+    console.error("Logout failed:", error);
+    // Hata durumunda da auth sayfasına yönlendir
+    if (typeof window !== "undefined") {
+      window.location.href = "/auth";
+    }
+    throw error;
+  }
+};
+
 export const authApi = {
-  githubLogin: () => {
-    const redirectUri = `${window.location.origin}/auth/callback`;
-    const baseUrl = `${API_URL}/oauth2/authorization/github`;
-    return `${baseUrl}?redirect_uri=${encodeURIComponent(redirectUri)}`;
-  },
-
-  handleGithubCallback: async () => {
-    try {
-      // Önce API'nin çalışıp çalışmadığını kontrol et
-      const healthCheck = await api.get("/actuator/health").catch(() => null);
-      if (!healthCheck) {
-        console.error("Backend server is not accessible");
-        return { success: false, message: "Backend server is not accessible" };
-      }
-
-      // Authentication durumunu kontrol et
-      const authCheck = await api.get("/auth/check");
-      console.log("Auth check response:", authCheck);
-
-      if (authCheck.status === 200) {
-        return { success: true, message: "Successfully logged in" };
-      }
-
-      return { success: false, message: "Authentication failed" };
-    } catch (error: unknown) {
-      console.error("GitHub callback error:", {
-        message: error instanceof Error ? error.message : "Unknown error",
-        response: (error as { response?: { data: unknown; status: number } })
-          ?.response?.data,
-        status: (error as { response?: { status: number } })?.response?.status,
-      });
-
-      return {
-        success: false,
-        message:
-          (error as { response?: { data?: { message: string } } })?.response
-            ?.data?.message || "Authentication failed",
-      };
-    }
-  },
-
-  checkAuth: async () => {
-    try {
-      const response = await api.get("/auth/check");
-      return response.status === 200;
-    } catch (error) {
-      console.error("Check auth error:", error);
-      return false;
-    }
-  },
-
-  logout: async () => {
-    try {
-      // Backend'e logout isteği gönder
-      await api.post("/auth/logout");
-
-      // Axios instance'ını sıfırla
-      api.defaults.headers.common["Authorization"] = "";
-
-      return { success: true };
-    } catch (error) {
-      console.error("Logout error:", error);
-      throw error;
-    }
-  },
+  githubLogin,
+  handleGithubCallback,
+  checkAuth,
+  logout,
 };

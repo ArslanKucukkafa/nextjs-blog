@@ -4,13 +4,28 @@ import { GithubIcon } from "@/components/icons";
 import { authApi } from "@/services/authApi";
 import { useFullAuthStore } from "@/store/authStore";
 import LoadingScreen from "@/components/LoadingScreen";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const { isLoading, setLoading } = useFullAuthStore();
 
-  const handleGithubLogin = () => {
-    setLoading(true);
-    window.location.href = authApi.githubLogin();
+  const handleGithubLogin = async () => {
+    try {
+      setLoading(true);
+      const loginUrl = await authApi.githubLogin();
+      console.log("GitHub OAuth URL:", loginUrl);
+
+      if (!loginUrl) {
+        throw new Error("Failed to generate GitHub login URL");
+      }
+
+      // Redirect to GitHub OAuth page
+      window.location.href = loginUrl;
+    } catch (error) {
+      console.error("Error during GitHub login:", error);
+      toast.error("Failed to start login process. Please try again.");
+      setLoading(false);
+    }
   };
 
   if (isLoading) {

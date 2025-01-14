@@ -1,17 +1,18 @@
 import axios from "axios";
 import { HeroText } from "./types/heroText";
 import envConfig from "../env.config.js";
+import { authStore } from "@/store/authStore";
 
 // Use the environment-specific configuration
 const API_URL = envConfig.NEXT_PUBLIC_API_URL;
 
 // Helper function to get headers with token
 const getHeaders = () => {
-  const token = localStorage.getItem("token");
+  const token = authStore.getState().token;
   return {
     Accept: "*/*",
     "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
+    ...(token && { Authorization: token }),
   };
 };
 

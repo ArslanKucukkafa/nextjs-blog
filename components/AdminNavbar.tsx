@@ -22,7 +22,7 @@ export default function AdminNavbar() {
     try {
       await authApi.logout();
       clearToken();
-      window.location.href = "/login";
+      window.location.href = "/auth";
     } catch (error) {
       console.error("Logout failed", error);
     }

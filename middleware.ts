@@ -2,62 +2,61 @@ import { NextResponse, type NextRequest } from "next/server";
 
 // Protected routes listesi
 const protectedRoutes = [
+  "/dashboard",
   // about
-  "/(protected)/about/create",
-  "/(protected)/about/create/skills",
-  "/(protected)/about/create/experiences",
-  "/(protected)/about/create/educations",
+  "/about/create",
+  "/about/create/skills",
+  "/about/create/experiences",
+  "/about/create/educations",
   // articles
-  "/(protected)/articles/create",
-  "/(protected)/articles/list/:id",
-  "/(protected)/articles/list",
+  "/articles/create",
+  "/articles/list",
   // perspectives
-  "/(protected)/perspectives/create",
-  "/(protected)/perspectives/list",
-  "/(protected)/perspectives/list/:id",
+  "/perspectives/create",
+  "/perspectives/list",
   // projects
-  "/(protected)/projects/list",
-  "/(protected)/projects/list/:id",
-
-  // dashboard
-  "/(protected)/dashboard",
+  "/projects/list",
 ];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get("access_token")?.value;
+  console.log("Middleware checking path:", pathname);
 
-  // Eğer logout query parametresi varsa, token kontrolü yapma
-  const isLoggingOut = request.nextUrl.searchParams.has("logout");
-  if (isLoggingOut) {
+  // Token'ı auth store'dan al
+  const authStorage = request.cookies.get("auth-storage")?.value;
+  console.log("Auth storage cookie:", authStorage ? "present" : "missing");
+
+  let token = null;
+
+  if (authStorage) {
+    try {
+      const authData = JSON.parse(decodeURIComponent(authStorage));
+      token = authData?.state?.token || null;
+      console.log("Token from storage:", token ? "present" : "missing");
+    } catch (error) {
+      console.error("Error parsing auth storage:", error);
+    }
+  }
+
+  // Eğer korumalı bir route ise ve token yoksa, login sayfasına yönlendir
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.includes(route),
+  );
+  if (isProtectedRoute && !token) {
+    console.log("Protected route access denied, redirecting to auth");
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
-  // Auth sayfası kontrolü - Eğer token varsa dashboard'a yönlendir
-  if (pathname === "/auth") {
-    if (token) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-    return NextResponse.next();
-  }
-
-  // Protected route kontrolü
-  const isProtectedRoute = protectedRoutes.some(
-    (route) =>
-      pathname.startsWith(route) ||
-      pathname.startsWith(route.replace("/(protected)", "")),
-  );
-
-  if (isProtectedRoute) {
-    if (!token) {
-      // Token yoksa auth sayfasına yönlendir
-      return NextResponse.redirect(new URL("/auth", request.url));
-    }
+  // Auth sayfasındaysa ve token varsa dashboard'a yönlendir
+  if (pathname === "/auth" && token) {
+    console.log("Authenticated user on auth page, redirecting to dashboard");
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();
 }
 
+// Matcher'ı güncelle
 export const config = {
   matcher: [
     /*

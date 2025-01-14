@@ -24,7 +24,7 @@ interface Project {
   fullName: string;
   imageUrl: string | null;
   readmeUrl: string;
-  readme: string;
+  readme: string | null;
   url: string;
   visible: boolean;
 }
@@ -59,7 +59,7 @@ export default function ProjectDetailClient({ id }: ProjectDetailClientProps) {
         fullName: data.fullName || "",
         imageUrl: data.imageUrl || null,
         readmeUrl: data.readmeUrl || "",
-        readme: data.readme || "",
+        readme: data.readme || null,
         url: data.url || "",
         visible: Boolean(data.visible),
       };
@@ -115,7 +115,7 @@ export default function ProjectDetailClient({ id }: ProjectDetailClientProps) {
         ...project,
         imageUrl: project.imageUrl ?? null,
         readmeUrl: project.readmeUrl ?? "",
-        readme: project.readme ?? "",
+        readme: project.readme ?? null,
         tags: tags,
       };
 
@@ -130,7 +130,7 @@ export default function ProjectDetailClient({ id }: ProjectDetailClientProps) {
         fullName: response.fullName || "",
         imageUrl: response.imageUrl || null,
         readmeUrl: response.readmeUrl || "",
-        readme: response.readme || "",
+        readme: response.readme || null,
         url: response.url || "",
         visible: Boolean(response.visible),
       };

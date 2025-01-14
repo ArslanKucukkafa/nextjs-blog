@@ -1,14 +1,24 @@
 import axios from "axios";
 import envConfig from "../env.config.js";
+import { authStore } from "@/store/authStore";
+
 const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");
+
+// Helper function to get headers with token
+const getHeaders = () => {
+  const token = authStore.getState().token;
+  return {
+    Accept: "*/*",
+    "Content-Type": "application/json",
+    ...(token && { Authorization: token }),
+  };
+};
 
 export const tagApi = {
   getProjectTags: async (): Promise<string[]> => {
     try {
       const response = await axios.get(`${API_URL}/projects/tags`, {
-        headers: {
-          Accept: "*/*",
-        },
+        headers: getHeaders(),
       });
       return response.data;
     } catch (error) {
@@ -20,9 +30,7 @@ export const tagApi = {
   getArticleTags: async (): Promise<string[]> => {
     try {
       const response = await axios.get(`${API_URL}/articles/tags`, {
-        headers: {
-          Accept: "*/*",
-        },
+        headers: getHeaders(),
       });
       return response.data;
     } catch (error) {
@@ -34,9 +42,7 @@ export const tagApi = {
   getPerspectiveTags: async (): Promise<string[]> => {
     try {
       const response = await axios.get(`${API_URL}/perspectives/tags`, {
-        headers: {
-          Accept: "*/*",
-        },
+        headers: getHeaders(),
       });
       return response.data;
     } catch (error) {

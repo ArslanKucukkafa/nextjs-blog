@@ -38,8 +38,8 @@ export default function CreatePerspectivePage() {
         tags,
         isResult: false,
       });
-      router.push("/perspectives/list");
-      router.refresh();
+      // Önce yönlendirme işlemini yap
+      await router.push("/perspectives/list");
     } catch (error) {
       console.error("Error creating perspective:", error);
       setError("Failed to create perspective");

@@ -6,6 +6,7 @@ export interface Project {
   imageUrl: string | null;
   url: string;
   readmeUrl: string | null;
+  readme: string | null;
   tags: string[];
   createdAt: string;
   visible: boolean;
