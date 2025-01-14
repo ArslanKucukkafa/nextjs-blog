@@ -1,49 +1,64 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Card,
-  CardBody,
-  Button,
-  Input,
-  Textarea,
-  Chip,
-} from "@nextui-org/react";
+import { Form, Input, Button, Card, CardBody, Chip } from "@nextui-org/react";
 import { perspectiveApi } from "@/services/perspectiveApi";
+import dynamic from "next/dynamic";
+import MarkdownIt from "markdown-it";
 
-export default function CreatePerspectivePage() {
+const MarkdownEditor = dynamic(() => import("react-markdown-editor-lite"), {
+  ssr: false,
+});
+import "react-markdown-editor-lite/lib/index.css";
+
+const mdParser = new MarkdownIt();
+
+export default function PerspectiveCreate() {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [tags, setTags] = React.useState<string[]>([]);
-  const [newTag, setNewTag] = React.useState("");
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
+
   const [perspective, setPerspective] = React.useState({
     title: "",
+    description: "",
     shortDescription: "",
     content: "",
-    result: "",
+    imageUrl: "",
     createdAt: new Date().toISOString(),
-    isResult: false,
     tags: [] as string[],
+    isResult: false,
   });
+
+  const [newTag, setNewTag] = React.useState("");
+
+  const handleEditorChange = ({ text }: { text: string }) => {
+    setPerspective((prev) => ({ ...prev, content: text }));
+  };
+
+  useEffect(() => {
+    if (isSubmitted) {
+      setTimeout(() => {
+        window.location.href = "/perspectives/list";
+      }, 1000);
+    }
+  }, [isSubmitted]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return;
 
     try {
       setIsLoading(true);
-      await perspectiveApi.createPerspective({
-        ...perspective,
-        tags,
-        isResult: false,
-      });
-      // Önce yönlendirme işlemini yap
-      await router.push("/perspectives/list");
+      const response = await perspectiveApi.createPerspective(perspective);
+
+      if (response) {
+        setIsSubmitted(true);
+      }
     } catch (error) {
       console.error("Error creating perspective:", error);
-      setError("Failed to create perspective");
-    } finally {
+      setError("Perspektif oluşturulurken bir hata oluştu");
       setIsLoading(false);
     }
   };
@@ -51,83 +66,110 @@ export default function CreatePerspectivePage() {
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTag.trim()) {
       e.preventDefault();
-      if (!tags.includes(newTag.trim())) {
-        setTags([...tags, newTag.trim()]);
+      if (!perspective.tags.includes(newTag.trim())) {
+        setPerspective((prev) => ({
+          ...prev,
+          tags: [...prev.tags, newTag.trim()],
+        }));
       }
       setNewTag("");
     }
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
+    setPerspective((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((tag) => tag !== tagToRemove),
+    }));
   };
 
-  if (error) return <div>Error: {error}</div>;
+  if (isSubmitted) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl mb-4">Perspektif başarıyla oluşturuldu</h2>
+          <p>Listeye yönlendiriliyorsunuz...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold mb-4">Create New Perspective</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex flex-col items-center max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6">Yeni Perspektif Oluştur</h1>
+      <Form onSubmit={handleSubmit} className="w-full space-y-6">
         <Card>
           <CardBody className="space-y-4">
             <Input
-              label="Title"
+              label="Başlık"
               value={perspective.title}
               onChange={(e) =>
-                setPerspective({ ...perspective, title: e.target.value })
+                setPerspective((prev) => ({ ...prev, title: e.target.value }))
               }
               required
-              placeholder="Enter perspective title"
             />
 
             <Input
-              label="Short Description"
+              label="Açıklama"
+              value={perspective.description}
+              onChange={(e) =>
+                setPerspective((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
+              required
+            />
+
+            <Input
+              label="Kısa Açıklama"
               value={perspective.shortDescription}
               onChange={(e) =>
-                setPerspective({
-                  ...perspective,
+                setPerspective((prev) => ({
+                  ...prev,
                   shortDescription: e.target.value,
-                })
+                }))
               }
               required
-              placeholder="Enter short description"
             />
 
-            <Textarea
-              label="Content"
-              value={perspective.content}
+            <Input
+              label="Resim URL"
+              value={perspective.imageUrl}
               onChange={(e) =>
-                setPerspective({ ...perspective, content: e.target.value })
+                setPerspective((prev) => ({
+                  ...prev,
+                  imageUrl: e.target.value,
+                }))
               }
-              required
-              minRows={4}
-              placeholder="Enter detailed content"
-            />
-
-            <Textarea
-              label="Result"
-              value={perspective.result}
-              onChange={(e) =>
-                setPerspective({ ...perspective, result: e.target.value })
-              }
-              required
-              minRows={2}
-              placeholder="Enter perspective result"
+              type="url"
+              placeholder="https://example.com/image.jpg"
             />
 
             <div>
+              <label className="block text-sm mb-2">İçerik</label>
+              <MarkdownEditor
+                key="markdown-editor"
+                value={perspective.content}
+                style={{ height: "400px" }}
+                renderHTML={(text) => mdParser.render(text)}
+                onChange={handleEditorChange}
+              />
+            </div>
+
+            <div>
               <Input
-                label="Add Tag"
                 value={newTag}
+                label="Etiket Ekle"
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyDown={handleAddTag}
-                placeholder="Press Enter to add tag"
+                placeholder="Enter'a basarak etiket ekleyin"
               />
               <div className="flex flex-wrap gap-2 mt-2">
-                {tags.map((tag) => (
+                {perspective.tags.map((tag) => (
                   <Chip
-                    key={tag}
                     onClose={() => handleRemoveTag(tag)}
+                    key={tag}
                     variant="flat"
                   >
                     {tag}
@@ -136,21 +178,38 @@ export default function CreatePerspectivePage() {
               </div>
             </div>
 
+            <div className="flex flex-col gap-2">
+              <label className="text-sm">Sonuç</label>
+              <input
+                type="checkbox"
+                checked={perspective.isResult}
+                onChange={(e) =>
+                  setPerspective((prev) => ({
+                    ...prev,
+                    isResult: e.target.checked,
+                  }))
+                }
+                className="h-4 w-4"
+              />
+            </div>
+
+            {error && <div className="text-red-500 text-sm">{error}</div>}
+
             <div className="flex justify-end gap-2">
               <Button
                 color="danger"
                 variant="light"
                 onPress={() => router.push("/perspectives/list")}
               >
-                Cancel
+                İptal
               </Button>
               <Button color="primary" type="submit" isLoading={isLoading}>
-                Create Perspective
+                Oluştur
               </Button>
             </div>
           </CardBody>
         </Card>
-      </form>
+      </Form>
     </div>
   );
 }

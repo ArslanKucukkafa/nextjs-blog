@@ -12,17 +12,13 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import { useFullAuthStore } from "@/store/authStore";
 import { authApi } from "@/services/authApi";
 
 export default function AdminNavbar() {
-  const { clearToken } = useFullAuthStore();
-
   const handleLogout = async () => {
     try {
       await authApi.logout();
-      clearToken();
-      window.location.href = "/auth";
+      // authApi.logout zaten gerekli temizleme işlemlerini yapıyor
     } catch (error) {
       console.error("Logout failed", error);
     }

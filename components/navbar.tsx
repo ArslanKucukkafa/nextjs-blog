@@ -1,14 +1,19 @@
+"use client";
+
 import {
   Navbar as NextUINavbar,
   NavbarContent,
   NavbarMenuToggle,
   NavbarBrand,
   NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
 } from "@nextui-org/navbar";
 import { Link } from "@nextui-org/link";
 import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import React from "react";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -20,9 +25,21 @@ import {
 } from "@/components/icons";
 
 export const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
+    <NextUINavbar
+      maxWidth="xl"
+      position="sticky"
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
+    >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+        <NavbarMenuToggle className="sm:hidden" />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <p className="font-bold text-inherit">ARLAN KUCUKKAFA</p>
@@ -72,12 +89,28 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <Link isExternal aria-label="Github" href={siteConfig.links.github}>
-          <GithubIcon className="text-default-500" />
-        </Link>
         <ThemeSwitch />
-        <NavbarMenuToggle />
       </NavbarContent>
+
+      <div className="sm:hidden">
+        <NavbarMenu>
+          {siteConfig.navItems.map((item) => (
+            <NavbarMenuItem key={item.href}>
+              <NextLink
+                className={clsx(
+                  linkStyles({ color: "foreground" }),
+                  "w-full",
+                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                )}
+                href={item.href}
+                onClick={closeMenu}
+              >
+                {item.label}
+              </NextLink>
+            </NavbarMenuItem>
+          ))}
+        </NavbarMenu>
+      </div>
     </NextUINavbar>
   );
 };

@@ -99,8 +99,14 @@ const checkAuth = async () => {
 const logout = async () => {
   try {
     await api.post("/auth/logout");
-    // Clear local token
-    authStore.getState().clearToken();
+
+    // Clear auth storage
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("auth-storage");
+      document.cookie =
+        "auth-storage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      authStore.getState().clearToken();
+    }
 
     // Auth sayfasına yönlendir
     if (typeof window !== "undefined") {
@@ -108,8 +114,12 @@ const logout = async () => {
     }
   } catch (error) {
     console.error("Logout failed:", error);
-    // Hata durumunda da auth sayfasına yönlendir
+    // Hata durumunda da token ve storage'ı temizle
     if (typeof window !== "undefined") {
+      localStorage.removeItem("auth-storage");
+      document.cookie =
+        "auth-storage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      authStore.getState().clearToken();
       window.location.href = "/auth";
     }
     throw error;
