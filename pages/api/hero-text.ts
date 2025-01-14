@@ -6,13 +6,19 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Origin', process.env.NEXT_PUBLIC_FRONTEND_URL || '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  if (req.method === "OPTIONS") {
+    res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
-      'Access-Control-Allow-Headers',
-      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
+      "Access-Control-Allow-Origin",
+      process.env.NEXT_PUBLIC_FRONTEND_URL || "*",
+    );
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization",
     );
     return res.status(200).end();
   }
@@ -21,8 +27,8 @@ export default async function handler(
   await runMiddleware(req, res, cors);
 
   // Ensure only GET method is allowed for this endpoint
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
+  if (req.method !== "GET") {
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
 
   try {
