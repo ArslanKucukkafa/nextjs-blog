@@ -48,7 +48,7 @@ export const heroTextApi = {
     try {
       console.log(
         "Attempting to fetch Hero Text from:",
-        `${API_URL}/hero-text`,
+        `${API_URL}/hero-text`
       );
 
       const response = await axios.get<HeroText>(`${API_URL}/hero-text`, {
@@ -84,7 +84,7 @@ export const heroTextApi = {
         {
           headers: getHeaders(),
           timeout: 10000, // 10 saniye timeout
-        },
+        }
       );
 
       console.log("Hero Text Update Response:", response.data);
