@@ -26,7 +26,8 @@ const ProjectDetail: React.FC = () => {
 
   React.useEffect(() => {
     const fetchProject = async () => {
-      if (!params.id) return;
+      // Add a type guard to ensure params is not null
+      if (!params || !params.id) return;
 
       try {
         const data = await projectApi.getProject(params.id as string);
@@ -48,7 +49,7 @@ const ProjectDetail: React.FC = () => {
     };
 
     fetchProject();
-  }, [params.id]);
+  }, [params]);
 
   if (isLoading) {
     return <div>Loading...</div>;

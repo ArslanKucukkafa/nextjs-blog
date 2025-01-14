@@ -3,18 +3,11 @@ import { HeroText } from "./types/heroText";
 import envConfig from "../env.config.js";
 
 // Use the environment-specific configuration
-const API_URL = envConfig.getConfig("NEXT_PUBLIC_API_URL");
+const API_URL = envConfig.NEXT_PUBLIC_API_URL;
 
 // Helper function to get headers with token
 const getHeaders = () => {
-  let token;
-  if (typeof window !== "undefined") {
-    token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("access_token="))
-      ?.split("=")[1];
-  }
-
+  const token = localStorage.getItem("token");
   return {
     Accept: "*/*",
     "Content-Type": "application/json",
@@ -44,7 +37,7 @@ const logErrorDetails = (error: unknown) => {
 };
 
 export const heroTextApi = {
-  getHeroText: async () => {
+  getHeroText: async (): Promise<HeroText> => {
     try {
       console.log(
         "Attempting to fetch Hero Text from:",
@@ -52,9 +45,8 @@ export const heroTextApi = {
       );
 
       const response = await axios.get<HeroText>(`${API_URL}/hero-text`, {
-        headers: {
-          Accept: "application/json",
-        },
+        headers: getHeaders(),
+        timeout: 10000, // 10 saniye timeout
       });
 
       return response.data;
@@ -75,7 +67,7 @@ export const heroTextApi = {
     try {
       console.log("Attempting to update Hero Text to:", `${API_URL}/hero-text`);
 
-      const response = await axios.post<HeroText>(
+      const response = await axios.put<HeroText>(
         `${API_URL}/hero-text`,
         heroText,
         {
@@ -88,17 +80,11 @@ export const heroTextApi = {
       return response.data;
     } catch (error: unknown) {
       // Hata detaylarını log et
-      logErrorDetails(error);
+      const processedError =
+        error instanceof Error ? error : new Error(String(error));
 
-      // Detaylı hata mesajı oluştur
-      const errorMessage = axios.isAxiosError(error)
-        ? `Network Error: ${error.message} (${error.code})`
-        : error instanceof Error
-          ? `Unexpected Error: ${error.message}`
-          : "Unknown error occurred";
-
-      // Hata detaylarını içeren özel bir hata nesnesi oluştur
-      throw new Error(errorMessage);
+      logErrorDetails(processedError);
+      throw processedError;
     }
   },
 };
