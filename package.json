@@ -12,6 +12,7 @@
     "env:debug": "node env-debug.js"
   },
   "dependencies": {
+    "@netlify/plugin-nextjs": "^5.9.3",
     "@nextui-org/button": "2.2.3",
     "@nextui-org/code": "2.2.3",
     "@nextui-org/input": "2.4.3",
