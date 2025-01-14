@@ -11,7 +11,22 @@ type MiddlewareFunction = (
 // Initializing the cors middleware
 const cors = Cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  origin: process.env.NEXT_PUBLIC_FRONTEND_URL || "*", // Use specific frontend URL in production
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      "http://localhost:3000",
+      "https://localhost:3000",
+      process.env.NEXT_PUBLIC_FRONTEND_URL,
+    ].filter(Boolean);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   allowedHeaders: [
     "X-CSRF-Token",
@@ -36,6 +51,7 @@ export function runMiddleware(
   return new Promise((resolve, reject) => {
     fn(req, res, (result) => {
       if (result instanceof Error) {
+        console.error("CORS Middleware Error:", result);
         return reject(result);
       }
       return resolve(result);
