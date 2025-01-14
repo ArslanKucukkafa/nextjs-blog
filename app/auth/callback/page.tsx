@@ -13,55 +13,55 @@ export default function CallbackPage() {
     const checkAuth = async () => {
       try {
         console.log("Starting auth check...");
+        console.log("Current cookies:", document.cookie);
 
-        // Document cookie'lerini kontrol et
-        console.log("Document cookies:", document.cookie);
+        // Cookie'den token'ı al
+        const cookies = document.cookie.split(";");
+        let accessToken = null;
+        for (const cookie of cookies) {
+          const [name, value] = cookie.trim().split("=");
+          if (name === "access_token") {
+            accessToken = decodeURIComponent(value);
+            console.log("Found access token:", accessToken);
+            break;
+          }
+        }
 
+        if (!accessToken) {
+          console.log("No access token found in cookies");
+          toast.error("No authentication token found");
+          router.replace("/auth");
+          return;
+        }
+
+        // Token ile auth check yap
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/check`,
           {
-            credentials: "include",
+            headers: {
+              Authorization: accessToken,
+            },
           },
         );
 
-        // Response headers'ı detaylı logla
-        console.log("\nResponse Headers:");
-        response.headers.forEach((value, key) => {
-          console.log(`${key}: ${value}`);
-        });
-
-        // Cookie spesifik kontrol
-        const setCookieHeader = response.headers.get("set-cookie");
-        console.log("\nSet-Cookie header:", setCookieHeader);
-
-        // CORS headers kontrol
-        console.log("\nCORS Headers:");
-        console.log(
-          "Allow-Credentials:",
-          response.headers.get("access-control-allow-credentials"),
-        );
-        console.log(
-          "Allow-Origin:",
-          response.headers.get("access-control-allow-origin"),
-        );
-        console.log("Response status:", response.status);
-
-        const responseData = await response.text();
-        console.log("\nResponse body:", responseData);
+        console.log("Auth check status:", response.status);
 
         if (response.ok) {
           console.log("Auth check successful");
+          setToken(accessToken); // Token'ı store'a kaydet
           toast.success("Successfully logged in");
-          // router.replace("/dashboard"); // Yönlendirmeyi kaldırdık
+          router.replace("/dashboard");
         } else {
           console.log("Auth check failed");
+          setToken(null);
           toast.error("Authentication failed");
-          // router.replace("/auth"); // Yönlendirmeyi kaldırdık
+          router.replace("/auth");
         }
       } catch (error) {
         console.error("Auth check error:", error);
+        setToken(null);
         toast.error("Authentication check failed");
-        // router.replace("/auth"); // Yönlendirmeyi kaldırdık
+        router.replace("/auth");
       } finally {
         setLoading(false);
       }
@@ -70,12 +70,5 @@ export default function CallbackPage() {
     checkAuth();
   }, [router, setLoading, setToken]);
 
-  return (
-    <div>
-      <LoadingScreen />
-      <div className="fixed top-4 right-4 p-4 bg-black/50 text-white rounded">
-        Check browser console for logs
-      </div>
-    </div>
-  );
+  return <LoadingScreen />;
 }
