@@ -10,9 +10,21 @@ type MiddlewareFunction = (
 
 // Initializing the cors middleware
 const cors = Cors({
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  origin: "*", // Be more specific in production, e.g., 'https://yourdomain.com'
-  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  origin: process.env.NEXT_PUBLIC_FRONTEND_URL || "*", // Use specific frontend URL in production
+  credentials: true,
+  allowedHeaders: [
+    "X-CSRF-Token",
+    "X-Requested-With",
+    "Accept",
+    "Accept-Version",
+    "Content-Length",
+    "Content-MD5",
+    "Content-Type",
+    "Date",
+    "X-Api-Version",
+    "Authorization",
+  ],
 });
 
 // Helper method to wait for a middleware to execute before continuing
