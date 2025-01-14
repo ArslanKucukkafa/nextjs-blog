@@ -45,8 +45,11 @@ export const heroTextApi = {
       );
 
       const response = await axios.get<HeroText>(`${API_URL}/hero-text`, {
-        headers: getHeaders(),
-        timeout: 10000, // 10 saniye timeout
+        headers: {
+          ...getHeaders(),
+          Origin: window.location.origin,
+        },
+        withCredentials: true,
       });
 
       return response.data;

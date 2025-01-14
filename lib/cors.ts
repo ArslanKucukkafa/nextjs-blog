@@ -1,30 +1,26 @@
 import Cors from "cors";
 import { NextApiRequest, NextApiResponse } from "next";
 
-// Define a more specific type for the middleware function
 type MiddlewareFunction = (
   req: NextApiRequest,
   res: NextApiResponse,
   callback: (result?: unknown) => void,
 ) => void;
 
-// Initializing the cors middleware
 const cors = Cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-
     const allowedOrigins = [
       "http://localhost:3000",
       "https://localhost:3000",
       process.env.NEXT_PUBLIC_FRONTEND_URL,
+      "*", // Be cautious with this in production
     ].filter(Boolean);
 
-    if (allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error("CORS not allowed"));
     }
   },
   credentials: true,
@@ -42,7 +38,6 @@ const cors = Cors({
   ],
 });
 
-// Helper method to wait for a middleware to execute before continuing
 export function runMiddleware(
   req: NextApiRequest,
   res: NextApiResponse,

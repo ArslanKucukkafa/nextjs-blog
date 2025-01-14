@@ -5,11 +5,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // Log incoming request details for debugging
+  // Debugging logs
   console.log("Incoming Request Method:", req.method);
-  console.log("Request Headers:", req.headers);
+  console.log("Request Origin:", req.headers.origin);
+  console.log("Frontend URL:", process.env.NEXT_PUBLIC_FRONTEND_URL);
 
-  // Always set CORS headers for all responses
+  // CORS headers for all responses
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
     "Access-Control-Allow-Origin",
@@ -24,12 +25,11 @@ export default async function handler(
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization",
   );
 
-  // Handle preflight requests
+  // Preflight handling
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  // Run the CORS middleware
   try {
     await runMiddleware(req, res, cors);
   } catch (corsError) {
@@ -40,13 +40,12 @@ export default async function handler(
     });
   }
 
-  // Ensure only GET method is allowed for this endpoint
+  // Method validation
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Method Not Allowed" });
   }
 
   try {
-    // Example: Return mock hero text data
     res.status(200).json({
       title: "Welcome to My Blog",
       subtitle: "Exploring Technology and Innovation",
@@ -60,9 +59,8 @@ export default async function handler(
   }
 }
 
-// Explicitly allow OPTIONS method for preflight requests
 export const config = {
   api: {
-    bodyParser: false, // Disable body parsing to allow CORS preflight
+    bodyParser: false,
   },
 };
