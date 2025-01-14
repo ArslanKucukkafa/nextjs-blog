@@ -44,33 +44,30 @@ const logErrorDetails = (error: unknown) => {
 };
 
 export const heroTextApi = {
-  getHeroText: async (): Promise<HeroText> => {
+  getHeroText: async () => {
     try {
       console.log(
         "Attempting to fetch Hero Text from:",
-        `${API_URL}/hero-text`
+        `${API_URL}/hero-text`,
       );
 
       const response = await axios.get<HeroText>(`${API_URL}/hero-text`, {
-        headers: getHeaders(),
-        timeout: 10000, // 10 saniye timeout
+        headers: {
+          Accept: "application/json",
+        },
       });
 
-      console.log("Hero Text Response:", response.data);
       return response.data;
     } catch (error: unknown) {
-      // Hata detaylarını log et
-      logErrorDetails(error);
+      // Explicitly type the error if possible
+      const processedError =
+        error instanceof Error ? error : new Error(String(error));
 
-      // Detaylı hata mesajı oluştur
-      const errorMessage = axios.isAxiosError(error)
-        ? `Network Error: ${error.message} (${error.code})`
-        : error instanceof Error
-          ? `Unexpected Error: ${error.message}`
-          : "Unknown error occurred";
+      // Log the error details
+      logErrorDetails(processedError);
 
-      // Hata detaylarını içeren özel bir hata nesnesi oluştur
-      throw new Error(errorMessage);
+      // Throw a new error with a consistent type
+      throw processedError;
     }
   },
 
@@ -84,7 +81,7 @@ export const heroTextApi = {
         {
           headers: getHeaders(),
           timeout: 10000, // 10 saniye timeout
-        }
+        },
       );
 
       console.log("Hero Text Update Response:", response.data);
