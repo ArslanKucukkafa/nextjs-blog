@@ -186,7 +186,7 @@ export default function AboutPage() {
                       <div
                         key={index}
                         className={`w-3 h-3 rounded-full ${
-                          index < skill.skillLevel / 20
+                          index < skill.skillLevel
                             ? "bg-primary"
                             : "bg-gray-200"
                         }`}

@@ -14,10 +14,11 @@ interface SimpleMarkdownProps {
 }
 
 const SimpleMarkdown: React.FC<SimpleMarkdownProps> = ({ content }) => {
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   return (
-    <div className={theme === "dark" ? "text-white" : "text-black"}>
+    <div className={currentTheme === "dark" ? "text-white" : "text-gray-900"}>
       <ReactMarkdown
         components={{
           code: ({
@@ -35,25 +36,80 @@ const SimpleMarkdown: React.FC<SimpleMarkdownProps> = ({ content }) => {
 
             return inline ? (
               <code
-                className={`${theme === "dark" ? "text-white" : "text-black"} px-1`}
+                className={`${
+                  currentTheme === "dark"
+                    ? "bg-gray-800 text-white"
+                    : "bg-gray-100 text-gray-900"
+                } px-1 rounded`}
                 {...props}
               >
                 {children}
               </code>
             ) : (
-              <pre className="my-4">
-                <SyntaxHighlighter
-                  style={theme === "dark" ? tomorrow : oneLight}
-                  language={language}
-                  PreTag="pre"
-                  {...props}
-                >
-                  {String(children).replace(/\n$/, "")}
-                </SyntaxHighlighter>
-              </pre>
+              <SyntaxHighlighter
+                style={currentTheme === "dark" ? tomorrow : oneLight}
+                language={language}
+                PreTag="div"
+                {...props}
+              >
+                {String(children).replace(/\n$/, "")}
+              </SyntaxHighlighter>
             );
           },
-          p: ({ children }) => <p className="my-2">{children}</p>,
+          p: ({ children }) => (
+            <p
+              className={
+                currentTheme === "dark" ? "text-white" : "text-gray-900"
+              }
+            >
+              {children}
+            </p>
+          ),
+          h1: ({ children }) => (
+            <h1
+              className={
+                currentTheme === "dark" ? "text-white" : "text-gray-900"
+              }
+            >
+              {children}
+            </h1>
+          ),
+          h2: ({ children }) => (
+            <h2
+              className={
+                currentTheme === "dark" ? "text-white" : "text-gray-900"
+              }
+            >
+              {children}
+            </h2>
+          ),
+          h3: ({ children }) => (
+            <h3
+              className={
+                currentTheme === "dark" ? "text-white" : "text-gray-900"
+              }
+            >
+              {children}
+            </h3>
+          ),
+          ul: ({ children }) => (
+            <ul
+              className={
+                currentTheme === "dark" ? "text-white" : "text-gray-900"
+              }
+            >
+              {children}
+            </ul>
+          ),
+          li: ({ children }) => (
+            <li
+              className={
+                currentTheme === "dark" ? "text-white" : "text-gray-900"
+              }
+            >
+              {children}
+            </li>
+          ),
         }}
       >
         {content}
