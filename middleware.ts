@@ -16,6 +16,8 @@ const protectedRoutes = [
   "/perspectives/list",
   // projects
   "/projects/list",
+  // hero
+  "/hero",
 ];
 
 export function middleware(request: NextRequest) {

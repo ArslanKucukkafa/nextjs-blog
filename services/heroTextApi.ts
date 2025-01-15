@@ -71,7 +71,7 @@ export const heroTextApi = {
     try {
       console.log("Attempting to update Hero Text to:", `${API_URL}/hero-text`);
 
-      const response = await axios.put<HeroText>(
+      const response = await axios.post<HeroText>(
         `${API_URL}/hero-text`,
         heroText,
         {
