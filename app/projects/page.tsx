@@ -217,9 +217,9 @@ const ProjectList = () => {
               <p className="mt-2 text-center">
                 {project.description || "No description available"}
               </p>
-              <div className="flex space-x-2 mt-2">
+              <div className="flex flex-wrap gap-2 mt-2 justify-center max-w-[270px]">
                 {project.tags.map((tag, index) => (
-                  <Chip key={index} color="warning" variant="shadow">
+                  <Chip key={index} color="warning" variant="shadow" size="sm">
                     {tag}
                   </Chip>
                 ))}
