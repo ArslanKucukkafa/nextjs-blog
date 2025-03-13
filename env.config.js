@@ -1,13 +1,13 @@
 // Environment Configuration
 const environments = {
   development: {
-    NEXT_PUBLIC_API_URL: "https://wizarddev-arslan.site",
+    NEXT_PUBLIC_API_URL: "http://158.178.149.38:8080", // Using Next.js proxy
   },
   production: {
-    NEXT_PUBLIC_API_URL: "https://wizarddev-arslan.site", // Production API URL
+    NEXT_PUBLIC_API_URL: "http://158.178.149.38:8080", // Using Next.js proxy
   },
   test: {
-    NEXT_PUBLIC_API_URL: "https://wizarddev-arslan.site",
+    NEXT_PUBLIC_API_URL: "http://158.178.149.38:8080", // Using Next.js proxy
   },
 };
 
