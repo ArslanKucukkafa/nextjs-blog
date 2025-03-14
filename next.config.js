@@ -7,7 +7,7 @@ const nextConfig = {
                 headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "http://158.178.149.38:8080",
+            value: "https://devmandalorian.engineer",
           },
           {
             key: "Access-Control-Allow-Methods",
