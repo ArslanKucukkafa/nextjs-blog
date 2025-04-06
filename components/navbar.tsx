@@ -39,13 +39,13 @@ export const Navbar = () => {
       onMenuOpenChange={setIsMenuOpen}
     >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarMenuToggle className="sm:hidden" />
+        <NavbarMenuToggle className="block md:hidden" />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <p className="font-bold text-inherit">ARLAN KUCUKKAFA</p>
           </NextLink>
         </NavbarBrand>
-        <ul className="hidden lg:flex gap-4 justify-start ml-2">
+        <ul className="hidden md:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
@@ -92,25 +92,23 @@ export const Navbar = () => {
         <ThemeSwitch />
       </NavbarContent>
 
-      <div className="sm:hidden">
-        <NavbarMenu>
-          {siteConfig.navItems.map((item) => (
-            <NavbarMenuItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "w-full",
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                href={item.href}
-                onClick={closeMenu}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarMenuItem>
-          ))}
-        </NavbarMenu>
-      </div>
+      <NavbarMenu className="md:hidden">
+        {siteConfig.navItems.map((item) => (
+          <NavbarMenuItem key={item.href}>
+            <NextLink
+              className={clsx(
+                linkStyles({ color: "foreground" }),
+                "w-full",
+                "data-[active=true]:text-primary data-[active=true]:font-medium",
+              )}
+              href={item.href}
+              onClick={closeMenu}
+            >
+              {item.label}
+            </NextLink>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </NextUINavbar>
   );
 };
