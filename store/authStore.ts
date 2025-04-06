@@ -24,10 +24,6 @@ export const authStore = create<AuthState>()(
     (set) => ({
       token: null,
       setToken: (token) => {
-        console.log("Setting token in store:", {
-          tokenExists: !!token,
-          tokenLength: token?.length,
-        });
         set({ token });
 
         // Token'ı cookie'ye manuel olarak kaydet

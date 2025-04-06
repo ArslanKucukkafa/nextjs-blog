@@ -19,16 +19,8 @@ api.interceptors.request.use((config) => {
 
   if (token) {
     config.headers.Authorization = token;
-    console.log("Adding token to request:", {
-      url: config.url,
-      hasToken: true,
-    });
   } else {
     console.log("No token available for request:", config.url);
-    console.log("Current auth state:", {
-      token: token,
-      tokenExists: !!token,
-    });
   }
 
   return config;
@@ -58,7 +50,6 @@ const githubLogin = async () => {
   try {
     // First, get the authorization URL from backend
     const response = await api.get("/auth/github/login");
-    console.log("Login URL response:", response.data);
 
     if (response.data?.url) {
       return response.data.url;
@@ -75,9 +66,7 @@ const githubLogin = async () => {
 
 const handleGithubCallback = async (code: string) => {
   try {
-    console.log("Handling GitHub callback with code:", code);
     const response = await api.post("/auth/github/callback", { code });
-    console.log("Callback response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error in GitHub callback:", error);
@@ -88,7 +77,6 @@ const handleGithubCallback = async (code: string) => {
 const checkAuth = async () => {
   try {
     const response = await api.get("/auth/check");
-    console.log("Auth check response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Auth check failed:", error);

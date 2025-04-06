@@ -22,11 +22,9 @@ const protectedRoutes = [
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log("Middleware checking path:", pathname);
 
   // Token'ı auth store'dan al
   const authStorage = request.cookies.get("auth-storage")?.value;
-  console.log("Auth storage cookie:", authStorage ? "present" : "missing");
 
   let token = null;
 
@@ -34,7 +32,6 @@ export function middleware(request: NextRequest) {
     try {
       const authData = JSON.parse(decodeURIComponent(authStorage));
       token = authData?.state?.token || null;
-      console.log("Token from storage:", token ? "present" : "missing");
     } catch (error) {
       console.error("Error parsing auth storage:", error);
     }
