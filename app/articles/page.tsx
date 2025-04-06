@@ -206,16 +206,16 @@ const ArticleList = () => {
               </div>
             </CardBody>
             <CardFooter className="justify-center">
-              <Link href={`/articles/${article.id}`} passHref>
-                <Button
-                  as="span"
-                  color="primary"
-                  startContent={<MarkdownIcon />}
-                  variant="bordered"
-                >
-                  Read More
-                </Button>
-              </Link>
+              <Button
+                as={Link}
+                href={`/articles/${article.id}`}
+                color="primary"
+                startContent={<MarkdownIcon />}
+                variant="bordered"
+                className="w-full"
+              >
+                Read More
+              </Button>
             </CardFooter>
           </Card>
         ))}

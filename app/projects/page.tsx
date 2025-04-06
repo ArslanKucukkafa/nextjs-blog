@@ -239,16 +239,16 @@ const ProjectList = () => {
                 View on GitHub
               </Button>
               {project.readmeUrl ? (
-                <Link href={`/projects/${project.id}`} passHref>
-                  <Button
-                    as="span"
-                    color="primary"
-                    startContent={<MarkdownIcon />}
-                    variant="bordered"
-                  >
-                    Read More
-                  </Button>
-                </Link>
+                <Button
+                  as={Link}
+                  href={`/projects/${project.id}`}
+                  color="primary"
+                  startContent={<MarkdownIcon />}
+                  variant="bordered"
+                  className="w-full"
+                >
+                  Read More
+                </Button>
               ) : (
                 <span className="text-red-500 cursor-not-allowed">
                   Readme not found

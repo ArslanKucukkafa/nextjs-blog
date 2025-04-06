@@ -192,16 +192,16 @@ const PerspectiveList = () => {
                   {formatDate(perspective.createdAt)}
                 </p>
               </div>
-              <Link href={`/perspectives/${perspective.id}`} passHref>
-                <Button
-                  as="span"
-                  color="primary"
-                  startContent={<MarkdownIcon />}
-                  variant="bordered"
-                >
-                  Read More
-                </Button>
-              </Link>
+              <Button
+                as={Link}
+                href={`/perspectives/${perspective.id}`}
+                color="primary"
+                startContent={<MarkdownIcon />}
+                variant="bordered"
+                className="w-full"
+              >
+                Read More
+              </Button>
             </CardFooter>
           </Card>
         ))}
