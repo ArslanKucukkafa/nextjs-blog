@@ -196,7 +196,7 @@ const ProjectList = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4 mt-4">
+      <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
         {filteredProjects.map((project) => (
           <Card key={project.id} className="py-4 flex flex-col items-center">
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-center text-center">

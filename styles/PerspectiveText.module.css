@@ -8,32 +8,37 @@
   display: grid;
   place-content: center;
   overflow: hidden;
-  height: auto;
+  height: 100vh;
+  width: 100%;
   background-color: hsl(var(--background));
+  padding: 1rem;
 }
 
 .text {
   color: hsl(var(--foreground));
   font-family: "Bai Jamjuree", sans-serif;
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   font-weight: 300;
   line-height: 0.75;
+  text-align: center;
 }
 
 .textIndent {
   composes: text;
-  text-indent: 35px;
+  text-indent: clamp(20px, 4vw, 35px);
   margin-bottom: -1px;
 }
 
 .shadow {
   composes: text;
   text-transform: uppercase;
-  font-size: 6rem;
+  font-size: clamp(2rem, 8vw, 6rem);
   position: relative;
   perspective: 100px;
   font-weight: 800;
   color: var(--txt-cta);
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .shadow::before {
@@ -61,4 +66,26 @@
     transparent,
     hsl(var(--background)) 85%
   );
+}
+
+/* Mobil cihazlar için ek düzenlemeler */
+@media screen and (max-width: 768px) {
+  .layeredText {
+    padding: 0.5rem;
+  }
+
+  .shadow {
+    perspective: 50px;
+  }
+
+  .shadow::before {
+    transform: rotateX(-30deg) scaleX(110%);
+  }
+}
+
+/* Çok küçük ekranlar için ek düzenlemeler */
+@media screen and (max-width: 480px) {
+  .textIndent {
+    text-indent: 15px;
+  }
 }
