@@ -1,13 +1,13 @@
 // Environment Configuration
 const environments = {
   development: {
-    NEXT_PUBLIC_API_URL: "https://devmandalorian.engineer", // Using Next.js proxy
+    NEXT_PUBLIC_API_URL: "https://arslankkafa.space", // Using Next.js proxy
   },
   production: {
-    NEXT_PUBLIC_API_URL: "https://devmandalorian.engineer", // Using Next.js proxy
+    NEXT_PUBLIC_API_URL: "https://arslankkafa.space", // Using Next.js proxy
   },
   test: {
-    NEXT_PUBLIC_API_URL: "https://devmandalorian.engineer", // Using Next.js proxy
+    NEXT_PUBLIC_API_URL: "https://arslankkafa.space", // Using Next.js proxy
   },
 };
 

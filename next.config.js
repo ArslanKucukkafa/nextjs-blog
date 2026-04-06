@@ -4,10 +4,10 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-                headers: [
+        headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://devmandalorian.engineer",
+            value: "https://arslankkafa.space",
           },
           {
             key: "Access-Control-Allow-Methods",
